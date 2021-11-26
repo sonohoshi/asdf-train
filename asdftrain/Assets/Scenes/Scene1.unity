@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnableIMU: 1
   EnableLocalize: 1
-  min_Distance: 3
+  min_Distance: 2
 --- !u!1 &195250745
 GameObject:
   m_ObjectHideFlags: 0

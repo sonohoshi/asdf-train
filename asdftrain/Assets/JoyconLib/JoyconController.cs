@@ -9,12 +9,6 @@ public class JoyconController : MonoBehaviour
     public int jc_ind;
     public Vector3? pre_Position;
 
-    void Start ()
-    {
-        accel = new Vector3(0, 0, 0);
-	}
-
-    // Update is called once per frame
     void Update () 
     {
         Joycon joyCon = JoyconManager.Instance.GetJoyConData(jc_ind);
@@ -23,6 +17,8 @@ public class JoyconController : MonoBehaviour
         {
             return;
         }
+
+        accel = joyCon.GetAccel();
 
         if(pre_Position != null)
         {
