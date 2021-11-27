@@ -20,6 +20,9 @@ public class TrainManager : MonoBehaviour
     private Text speedText;
 
     [SerializeField]
+    private Image powerLine;
+
+    [SerializeField]
     private Text toCheonanText;
     
     [SerializeField]
@@ -74,7 +77,9 @@ public class TrainManager : MonoBehaviour
         if (IsStarted)
         {
             speedText.text = $"{_trainRigidbody.velocity.x * 10f:0} km/h";
-            toCheonanText.text = $"천안까지 {100 - 100 * (train.transform.position.x / destination.x):0.0} km";
+            toCheonanText.text =
+                $"천안까지 {Mathf.Clamp(100 - 100 * train.transform.position.x / destination.x, 0f, 100f):0.0} km";
+            powerLine.DOFade(_trainRigidbody.velocity.x * 10f / 300f, 0f);
         }
     }
 
@@ -86,5 +91,7 @@ public class TrainManager : MonoBehaviour
         mainCamTransform.rotation = Quaternion.Euler(badEndingCamRotation);
         mainCamTransform.position = badEndingCamPosition;
         IsStarted = false;
+        powerLine.DOFade(0f, .5f);
+        speedText.text += " 이었던 것";
     }
 }
