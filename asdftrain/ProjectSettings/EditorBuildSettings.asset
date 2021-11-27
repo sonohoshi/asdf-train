@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/ksmdev.unity
+    guid: a7fcf38867b585247ad5cb1fe5690442
   m_configObjects: {}
