@@ -62,7 +62,7 @@ public class TrainMover : MonoBehaviour
         _firstPrePosition = accel;
         var result = distance >= JoyconManager.Instance.min_Distance;
         //Debug.Log($"{0} index joycon result : {result}");
-        return result;
+        return result || Input.GetKey(KeyCode.Z);
     }
 
     private bool GetInputSecondController()
@@ -73,6 +73,6 @@ public class TrainMover : MonoBehaviour
         _secondPrePosition = accel;
         var result = distance >= JoyconManager.Instance.min_Distance;
         //Debug.Log($"{1} index joycon result : {result}");
-        return result;
+        return result || Input.GetKey(KeyCode.X);
     }
 }
