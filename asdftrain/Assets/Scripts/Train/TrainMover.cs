@@ -36,6 +36,15 @@ public class TrainMover : MonoBehaviour
         _frames++;
         if (_firstJoycon == null || _secondJoycon == null)
         {
+            if (Input.GetKey(KeyCode.Z) && Input.GetKey(KeyCode.X))
+            {
+                _rigidbody.AddForce(Vector3.right * 5f);
+                if (_rigidbody.velocity.x >= 30)
+                {
+                    _rigidbody.velocity = new Vector3(30, 0, 0);
+                }
+            }
+
             return;
         }
         
@@ -43,6 +52,10 @@ public class TrainMover : MonoBehaviour
         {
             _rigidbody.AddForce(Vector3.right * 25f);
             _checkCount++;
+            if (_rigidbody.velocity.x >= 30)
+            {
+                _rigidbody.velocity = new Vector3(30, 0, 0);
+            }
         }
 
         if (_timeFloat >= 1f)
@@ -62,7 +75,7 @@ public class TrainMover : MonoBehaviour
         _firstPrePosition = accel;
         var result = distance >= JoyconManager.Instance.min_Distance;
         //Debug.Log($"{0} index joycon result : {result}");
-        return result || Input.GetKey(KeyCode.Z);
+        return result;
     }
 
     private bool GetInputSecondController()
@@ -73,6 +86,6 @@ public class TrainMover : MonoBehaviour
         _secondPrePosition = accel;
         var result = distance >= JoyconManager.Instance.min_Distance;
         //Debug.Log($"{1} index joycon result : {result}");
-        return result || Input.GetKey(KeyCode.X);
+        return result;
     }
 }

@@ -21,7 +21,7 @@ public class speedmeter : MonoBehaviour
     void FixedUpdate()
     {
         m_Speed = GetSpeed();
-        m_KilometersPerHour.text = string.Format("{0:00} km/h", m_Speed * 10f);
+        m_KilometersPerHour.text = string.Format("{0:0} km/h", m_Speed * 10f);
         if (Input.GetKey("up"))
         {
             rigd.velocity = new Vector3(0, 0, 10);
