@@ -58,10 +58,6 @@ public class TrainMover : MonoBehaviour
             }
         }
         
-        // --- for Debug ---
-        _timeFloat += Time.deltaTime;
-        _frames++;
-        // --- for Debug ---
         if (_firstJoycon == null || _secondJoycon == null)
         {
             if (Input.GetKey(KeyCode.Z) && Input.GetKey(KeyCode.X))
@@ -85,15 +81,6 @@ public class TrainMover : MonoBehaviour
                 _rigidbody.velocity = new Vector3(30, 0, 0);
             }
         }
-        // --- for Debug ---
-        if (_timeFloat >= 1f)
-        {
-            _timeFloat = 0;
-            Debug.LogError($"checked frame per sec : {(float)_checkCount/(float)_frames}, {_checkCount}, {_frames}");
-            _checkCount = 0;
-            _frames = 0;
-        }
-        // --- for Debug ---
     }
 
     private bool GetInputFirstController()
@@ -103,7 +90,6 @@ public class TrainMover : MonoBehaviour
         
         _firstPrePosition = accel;
         var result = distance >= JoyconManager.Instance.min_Distance;
-        //Debug.Log($"{0} index joycon result : {result}");
         return result;
     }
 
@@ -114,7 +100,6 @@ public class TrainMover : MonoBehaviour
         
         _secondPrePosition = accel;
         var result = distance >= JoyconManager.Instance.min_Distance;
-        //Debug.Log($"{1} index joycon result : {result}");
         return result;
     }
 

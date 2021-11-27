@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TrainManager : MonoBehaviour
@@ -52,6 +54,18 @@ public class TrainManager : MonoBehaviour
     [SerializeField] 
     private Image feverGaugeImage;
 
+    [SerializeField]
+    private Slider destinationSlider;
+
+    [SerializeField]
+    private Text clearText;
+
+    [SerializeField] 
+    private Button[] reStartButtons; 
+
+    [SerializeField] 
+    private Button[] exitButtons;
+    
     private Rigidbody _trainRigidbody;
     private int _startCount = 3;
     private float _chargedTime;
@@ -66,6 +80,22 @@ public class TrainManager : MonoBehaviour
         _trainRigidbody = train.GetComponent<Rigidbody>();
         Instance = this;
         _originLineColor = powerLine.color;
+        foreach (var button in reStartButtons)
+        {
+            button.onClick.AddListener(() => SceneManager.LoadScene(1));
+        }
+
+        foreach (var button in exitButtons)
+        {
+            button.onClick.AddListener(() =>
+            {
+#if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+            });
+        }
     }
 
     private IEnumerator Start()
@@ -97,31 +127,31 @@ public class TrainManager : MonoBehaviour
             return;
         }
 
-        if (IsStarted && _trainRigidbody.velocity.x == 0)
+        if (IsStarted && _trainRigidbody.velocity.x == 0 && train.transform.position.x > destination.x)
         {
-            //OnClear();
-            //return;
+            OnClear();
+            return;
         }
 
         if (IsStarted)
         {
             _totalTime += Time.deltaTime;
             speedText.text = $"{_trainRigidbody.velocity.x * 10f:0} km/h";
+            var normalizedDistance = train.transform.position.x / destination.x;
             toCheonanText.text =
-                $"천안까지 {Mathf.Clamp(100 - 100 * train.transform.position.x / destination.x, 0f, 100f):0.0} km";
+                $"천안까지 {Mathf.Clamp(100 - 100 * normalizedDistance, 0f, 100f):0.0} km";
             var hundredPercent = _trainRigidbody.velocity.x * 10f / 300f;
             powerLine.DOFade(hundredPercent, 0f);
             speedGauge.fillAmount = hundredPercent;
+            destinationSlider.value = normalizedDistance;
+
+            if (train.transform.position.x >= 480)
+            {
+                _trainRigidbody.freezeRotation = false;
+            }
         }
 
-        if (train.IsBoosting)
-        {
-            feverGaugeImage.fillAmount = train.ChargedTime / 2f;
-        }
-        else
-        {
-            feverGaugeImage.fillAmount = train.ChargedTime / 5f;
-        }
+        feverGaugeImage.fillAmount = train.ChargedTime / (train.IsBoosting ? 2f : 5f);
     }
 
     private void OnClear()
@@ -130,6 +160,7 @@ public class TrainManager : MonoBehaviour
         IsStarted = false;
         powerLine.DOFade(0f, .5f);
         gameClearUI.SetActive(true);
+        clearText.text = $"축하합니다!\n{_totalTime:0.0초}의 시간에 걸쳐 천안아산역에 도착하셨습니다!";
     }
 
     private void OnBadEnd()
