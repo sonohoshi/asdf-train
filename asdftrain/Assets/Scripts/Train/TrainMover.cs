@@ -117,9 +117,10 @@ public class TrainMover : MonoBehaviour
 
     private IEnumerator Boost()
     {
-        Debug.LogError("BOOST !!!");
+        Debug.LogWarning("BOOST !!!");
         
         _isBoosting = true;
+        _chargedTime = 2f;
         while (_chargedTime > 0f)
         {
             _rigidbody.velocity = new Vector3(30, 0, 0);
