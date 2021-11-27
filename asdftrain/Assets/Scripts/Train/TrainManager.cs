@@ -74,7 +74,8 @@ public class TrainManager : MonoBehaviour
         if (IsStarted)
         {
             speedText.text = $"{_trainRigidbody.velocity.x * 10f:0} km/h";
-            toCheonanText.text = $"천안까지 {100 - 100 * (train.transform.position.x / destination.x):0.0} km";
+            toCheonanText.text =
+                $"천안까지 {100 - 100 * Mathf.Clamp(train.transform.position.x / destination.x, 0f, 100f):0.0} km";
         }
     }
 
