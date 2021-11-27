@@ -8,13 +8,14 @@ public class startscenemanager : MonoBehaviour
     // Start is called before the first frame update
     public void gamestart()
     {
-        SceneManager.LoadScene("gamescene");
+        SceneManager.LoadScene("ksmdev");
         Debug.Log("scene loaded!");
     }
 
     public void exitgame()
     {
         Application.Quit();
+        Debug.Log("QUIT GAME");
     }
 }
 
