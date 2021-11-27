@@ -27,6 +27,9 @@ public class TrainMover : MonoBehaviour
     
     private const float BoostLimitTime = 5f;
 
+    public float ChargedTime => _chargedTime;
+    public bool IsBoosting => _isBoosting;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -117,7 +120,7 @@ public class TrainMover : MonoBehaviour
 
     private IEnumerator Boost()
     {
-        Debug.LogWarning("BOOST !!!");
+        TrainManager.Instance.OnBoost();
         
         _isBoosting = true;
         _chargedTime = 2f;
@@ -129,5 +132,6 @@ public class TrainMover : MonoBehaviour
         }
 
         _isBoosting = false;
+        TrainManager.Instance.DisableBoost();
     }
 }

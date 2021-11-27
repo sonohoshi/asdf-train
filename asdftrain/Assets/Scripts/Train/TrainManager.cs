@@ -16,6 +16,9 @@ public class TrainManager : MonoBehaviour
     [SerializeField]
     private Text speedText;
 
+    [SerializeField] 
+    private Image speedGauge;
+
     [SerializeField]
     private Image powerLine;
 
@@ -40,9 +43,20 @@ public class TrainManager : MonoBehaviour
     [SerializeField] 
     private Image startImage;
 
+    [SerializeField] 
+    private GameObject gameOverUI;
+
+    [SerializeField] 
+    private GameObject gameClearUI;
+
+    [SerializeField] 
+    private Image feverGaugeImage;
+
     private Rigidbody _trainRigidbody;
     private int _startCount = 3;
     private float _chargedTime;
+    private Color _originLineColor;
+    private float _totalTime;
 
     public bool IsStarted { get; private set; }
     public static TrainManager Instance { get; private set; }
@@ -51,6 +65,7 @@ public class TrainManager : MonoBehaviour
     {
         _trainRigidbody = train.GetComponent<Rigidbody>();
         Instance = this;
+        _originLineColor = powerLine.color;
     }
 
     private IEnumerator Start()
@@ -79,15 +94,42 @@ public class TrainManager : MonoBehaviour
         if (IsStarted && _trainRigidbody.velocity.y < 0f)
         {
             OnBadEnd();
+            return;
         }
-        
+
+        if (IsStarted && _trainRigidbody.velocity.x == 0)
+        {
+            //OnClear();
+            //return;
+        }
+
         if (IsStarted)
         {
+            _totalTime += Time.deltaTime;
             speedText.text = $"{_trainRigidbody.velocity.x * 10f:0} km/h";
             toCheonanText.text =
                 $"천안까지 {Mathf.Clamp(100 - 100 * train.transform.position.x / destination.x, 0f, 100f):0.0} km";
-            powerLine.DOFade(_trainRigidbody.velocity.x * 10f / 300f, 0f);
+            var hundredPercent = _trainRigidbody.velocity.x * 10f / 300f;
+            powerLine.DOFade(hundredPercent, 0f);
+            speedGauge.fillAmount = hundredPercent;
         }
+
+        if (train.IsBoosting)
+        {
+            feverGaugeImage.fillAmount = train.ChargedTime / 2f;
+        }
+        else
+        {
+            feverGaugeImage.fillAmount = train.ChargedTime / 5f;
+        }
+    }
+
+    private void OnClear()
+    {
+        Destroy(train);
+        IsStarted = false;
+        powerLine.DOFade(0f, .5f);
+        gameClearUI.SetActive(true);
     }
 
     private void OnBadEnd()
@@ -100,5 +142,16 @@ public class TrainManager : MonoBehaviour
         IsStarted = false;
         powerLine.DOFade(0f, .5f);
         speedText.text += " 이었던 것";
+        gameOverUI.SetActive(true);
+    }
+
+    public void OnBoost()
+    {
+        powerLine.color = Color.red;
+    }
+
+    public void DisableBoost()
+    {
+        powerLine.color = _originLineColor;
     }
 }
