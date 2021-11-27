@@ -15,9 +15,12 @@ public class TrainMover : MonoBehaviour
     
     private Vector3? _firstPrePosition;
     private Vector3? _secondPrePosition;
+    
+    // --- for Debug ---
     private float _timeFloat;
     private int _checkCount;
     private int _frames;
+    // --- for Debug ---
 
     private void Awake()
     {
@@ -32,8 +35,15 @@ public class TrainMover : MonoBehaviour
     
     private void Update()
     {
+        if (!TrainManager.Instance.IsStarted)
+        {
+            return;
+        }
+        
+        // --- for Debug ---
         _timeFloat += Time.deltaTime;
         _frames++;
+        // --- for Debug ---
         if (_firstJoycon == null || _secondJoycon == null)
         {
             if (Input.GetKey(KeyCode.Z) && Input.GetKey(KeyCode.X))
@@ -58,6 +68,7 @@ public class TrainMover : MonoBehaviour
             }
         }
 
+        // --- for Debug ---
         if (_timeFloat >= 1f)
         {
             _timeFloat = 0;
@@ -65,6 +76,7 @@ public class TrainMover : MonoBehaviour
             _checkCount = 0;
             _frames = 0;
         }
+        // --- for Debug ---
     }
 
     private bool GetInputFirstController()
