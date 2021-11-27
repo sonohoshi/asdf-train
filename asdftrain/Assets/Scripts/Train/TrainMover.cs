@@ -21,6 +21,11 @@ public class TrainMover : MonoBehaviour
     private int _checkCount;
     private int _frames;
     // --- for Debug ---
+    
+    private float _chargedTime;
+    private bool _isBoosting;
+    
+    private const float BoostLimitTime = 5f;
 
     private void Awake()
     {
@@ -38,6 +43,16 @@ public class TrainMover : MonoBehaviour
         if (!TrainManager.Instance.IsStarted)
         {
             return;
+        }
+        
+        if (!_isBoosting)
+        {
+            _chargedTime = _rigidbody.velocity.x >= 28 ? _chargedTime + Time.deltaTime : 0;
+
+            if (_chargedTime >= BoostLimitTime)
+            {
+                StartCoroutine(Boost());
+            }
         }
         
         // --- for Debug ---
@@ -67,7 +82,6 @@ public class TrainMover : MonoBehaviour
                 _rigidbody.velocity = new Vector3(30, 0, 0);
             }
         }
-
         // --- for Debug ---
         if (_timeFloat >= 1f)
         {
@@ -99,5 +113,20 @@ public class TrainMover : MonoBehaviour
         var result = distance >= JoyconManager.Instance.min_Distance;
         //Debug.Log($"{1} index joycon result : {result}");
         return result;
+    }
+
+    private IEnumerator Boost()
+    {
+        Debug.LogError("BOOST !!!");
+        
+        _isBoosting = true;
+        while (_chargedTime > 0f)
+        {
+            _rigidbody.velocity = new Vector3(30, 0, 0);
+            yield return null;
+            _chargedTime -= Time.deltaTime;
+        }
+
+        _isBoosting = false;
     }
 }

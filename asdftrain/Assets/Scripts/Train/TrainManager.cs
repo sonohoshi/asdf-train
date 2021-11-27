@@ -36,6 +36,7 @@ public class TrainManager : MonoBehaviour
 
     private Rigidbody _trainRigidbody;
     private int _startCount = 3;
+    private float _chargedTime;
 
     public bool IsStarted { get; private set; }
     public static TrainManager Instance { get; private set; }
@@ -65,15 +66,15 @@ public class TrainManager : MonoBehaviour
 
     private void Update()
     {
+        if (IsStarted && _trainRigidbody.velocity.y < 0f)
+        {
+            OnBadEnd();
+        }
+        
         if (IsStarted)
         {
             speedText.text = $"{_trainRigidbody.velocity.x * 10f:0} km/h";
             toCheonanText.text = $"천안까지 {100 - 100 * (train.transform.position.x / destination.x):0.0} km";
-        }
-        
-        if (IsStarted && _trainRigidbody.velocity.y < 0f)
-        {
-            OnBadEnd();
         }
     }
 
@@ -84,5 +85,6 @@ public class TrainManager : MonoBehaviour
         var mainCamTransform = Camera.main.transform;
         mainCamTransform.rotation = Quaternion.Euler(badEndingCamRotation);
         mainCamTransform.position = badEndingCamPosition;
+        IsStarted = false;
     }
 }

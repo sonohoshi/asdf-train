@@ -1231,7 +1231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f53335f4e89ae4d9c6c473e17f0d0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: {x: 990, y: 0, z: 0}
+  destination: {x: 470, y: 0, z: 0}
   blur: {fileID: 1937876015}
   countText: {fileID: 573729779}
   speedText: {fileID: 755800376}
@@ -1239,7 +1239,7 @@ MonoBehaviour:
   virtualCam: {fileID: 1292255433}
   train: {fileID: 1562928167}
   badEndingCamRotation: {x: 0, y: 0, z: 0}
-  badEndingCamPosition: {x: 450, y: 2, z: -25}
+  badEndingCamPosition: {x: 480, y: 2, z: -25}
 --- !u!1001 &6552502243232886582
 PrefabInstance:
   m_ObjectHideFlags: 0
