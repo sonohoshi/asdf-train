@@ -14,9 +14,6 @@ public class TrainManager : MonoBehaviour
     private CanvasGroup blur;
 
     [SerializeField]
-    private Text countText;
-
-    [SerializeField]
     private Text speedText;
 
     [SerializeField]
@@ -37,6 +34,12 @@ public class TrainManager : MonoBehaviour
     [SerializeField]
     private Vector3 badEndingCamPosition;
 
+    [SerializeField]
+    private Image[] countImages;
+
+    [SerializeField] 
+    private Image startImage;
+
     private Rigidbody _trainRigidbody;
     private int _startCount = 3;
     private float _chargedTime;
@@ -54,17 +57,21 @@ public class TrainManager : MonoBehaviour
     {
         while (_startCount > 0)
         {
-            countText.text = _startCount.ToString();
+            countImages[_startCount - 1].gameObject.SetActive(true);
             yield return new WaitForSeconds(1f);
-            _startCount--;
+            countImages[--_startCount].gameObject.SetActive(false);
             if (_startCount == 0)
             {
                 blur.DOFade(0f, 1f);
             }
         }
-        
-        blur.gameObject.SetActive(false);
+
         IsStarted = true;
+        startImage.gameObject.SetActive(true);
+        startImage.DOFade(0f, 0f);
+        startImage.DOFade(1f, 0.5f);
+        yield return new WaitForSeconds(1f);
+        blur.gameObject.SetActive(false);
     }
 
     private void Update()
