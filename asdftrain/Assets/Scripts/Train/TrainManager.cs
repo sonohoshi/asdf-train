@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -65,6 +66,12 @@ public class TrainManager : MonoBehaviour
 
     [SerializeField] 
     private Button[] exitButtons;
+
+    [SerializeField] 
+    private AudioSource[] countdownSources;
+
+    [SerializeField]
+    private AudioSource bgm;
     
     private Rigidbody _trainRigidbody;
     private int _startCount = 3;
@@ -103,11 +110,13 @@ public class TrainManager : MonoBehaviour
         while (_startCount > 0)
         {
             countImages[_startCount - 1].gameObject.SetActive(true);
+            countdownSources[_startCount].Play();
             yield return new WaitForSeconds(1f);
             countImages[--_startCount].gameObject.SetActive(false);
             if (_startCount == 0)
             {
                 blur.DOFade(0f, 1f);
+                countdownSources[0].Play();
             }
         }
 
@@ -117,6 +126,7 @@ public class TrainManager : MonoBehaviour
         startImage.DOFade(1f, 0.5f);
         yield return new WaitForSeconds(1f);
         blur.gameObject.SetActive(false);
+        bgm.Play();
     }
 
     private void Update()

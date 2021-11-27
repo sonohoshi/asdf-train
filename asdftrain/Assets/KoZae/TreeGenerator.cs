@@ -38,7 +38,7 @@ public class TreeGenerator : MonoBehaviour
 
             posX += treeGap;
 
-            Debug.Log(posX);
+//            Debug.Log(posX);
 
         }
     }
